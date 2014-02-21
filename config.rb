@@ -5,14 +5,10 @@ CONFIG = {
   :domain_name => "sakuracoin.info",
   :record_ttl => "60",
   :min_version => 70002,
-  :subversions => "(" +
-      [
-        "'/Satoshi:0.8.5.1/'",
-        "'/Satoshi:0.8.5.2/'",
-        "'/Satoshi:0.8.5.3/'",
-        "'/Satoshi:0.8.6.1/'",
-      ].join(", ") +
-      ")",
+  :subversions => [
+    "'/Satoshi:0.8.6.1/'",
+    "'/Satoshi:0.8.6.2/'",
+  ].join(", "),
   :connect_timeout => 7,
   :unaccep_check_rate => 36 * 60 * 60,
   :min_up_time_to_check => 7 * 24 * 60 * 60,

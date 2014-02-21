@@ -26,7 +26,7 @@ begin
 p [Time.at(node[:timestamp]), node[:ipv4], node[:port]]
     add_untested_node(node[:ipv4], node[:port])
   end
-  add_node_to_dns(host, port, node.getVersion) if node
+  add_node_to_dns(host, port, node.getVersion, node.getSubversion) if node
 rescue => x
 p x
 raise x

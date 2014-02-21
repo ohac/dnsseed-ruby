@@ -152,13 +152,6 @@ EOF
   end
 end
 
-def init_results(result)
-  # TODO
-  rows = result.to_a
-  result.finalize()
-  rows
-end
-
 def query_accepting
   now = Time.now.to_i
   current_time = now - CONFIG[:accep_check_rate]
@@ -190,27 +183,34 @@ def get_list_of_nodes_for_dns
   sql = <<EOF
 SELECT ipv4 FROM nodes WHERE
   accepts_incoming = 1 AND port = 9301 AND version >= ?
-  AND subversion IN ? ORDER BY last_check DESC LIMIT 20;
+  AND subversion IN (?) ORDER BY last_check DESC LIMIT 20;
 EOF
   @db.query(sql, [CONFIG[:min_version], CONFIG[:subversions]])
 end
 
 def query_version_count
-  @db.query <<EOF
+  @db.execute <<EOF
 SELECT COUNT(*), subversion AS version FROM nodes WHERE
   accepts_incoming = 1 AND port = 9301 GROUP BY subversion ORDER BY subversion;
 EOF
 end
 
 def query_dns_total
+# TODO
+=begin
   sql = <<EOF
 SELECT COUNT(*) FROM nodes WHERE accepts_incoming = 1 AND 
-  port = 9301 AND version >= ? AND
-  subversion IN ?;
+  port = 9301 AND version >= ? AND subversion IN (?);
 EOF
-  @db.query(sql, [CONFIG[:min_version], CONFIG[:subversions]])
+  @db.get_first_value(sql, [CONFIG[:min_version], CONFIG[:subversions]])
+=end
+  sql = <<EOF
+SELECT COUNT(*) FROM nodes WHERE accepts_incoming = 1 AND 
+  port = 9301 AND version >= ?;
+EOF
+  @db.get_first_value(sql, [CONFIG[:min_version]])
 end
 
 def query_total
-  @db.query("SELECT COUNT(*) FROM nodes;")
+  @db.get_first_value("SELECT COUNT(*) FROM nodes;")
 end
