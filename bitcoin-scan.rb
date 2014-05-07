@@ -22,7 +22,9 @@ def walk(host, port, localdb)
   scan(host, port) do |node|
     key = [node[:ipv4], node[:port]]
     entry = localdb[key] || {}
-    entry[:timestamp] = node[:timestamp]
+    ts = entry[:timestamp]
+    nts = node[:timestamp]
+    entry[:timestamp] = ts ? [ts, nts].max : nts
     localdb[key] = entry
   end
 end
@@ -35,6 +37,10 @@ def getfreshnodes(localdb, min_last_seen = 1)
   end
 end
 
+def dice(a)
+  a[rand(a.size)]
+end
+
 def mainloop
   waitsec = CONFIG[:connect_timeout]
   localdb = {}
@@ -42,7 +48,7 @@ def mainloop
     key = [host, port]
     localdb[key] = { :timestamp => Time.now.to_i }
   end
-  host, port = localdb.keys[0]
+  host, port = dice(localdb.keys)
 p [:init, host, port]
   loop do
     begin
@@ -66,8 +72,7 @@ p x
       subversion = v[:subversion]
 p [host, port, nt, version, subversion]
     end
-    keys = freshnodes.keys
-    host, port = keys[rand(keys.size)]
+    host, port = dice(freshnodes.keys)
 p [:next, host, port]
 puts
     sleep waitsec
