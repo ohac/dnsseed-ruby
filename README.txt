@@ -14,11 +14,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Running
 -------
 
-To bootstrap call ruby bitcoin-scan.rb (the ip of a known-good node)
-ie
-ruby bitcoin-scan.rb `dig +short block-explorer.com`
-warning: this node will end up in the database, so call a node by its public ip
-followed by repeated calls to ruby bitcoin-scan-net.rb which will fill the dbs
-quite quickly.
-bitcoin-scan-net.rb should also be put on an appropriate cron job, checking
-to make sure it isnt already running (which would just duplicate effort)
+To bootstrap call ruby bitcoin-scan.rb
