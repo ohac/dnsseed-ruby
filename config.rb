@@ -1,9 +1,4 @@
 CONFIG = {
-  :sqlite_file => "sakuracoin.sqlite",
-  :bind_header_file => "./db.dnsseed.sakuracoin.info.header",
-  :bind_record_file => "./db.dnsseed.sakuracoin.info",
-  :domain_name => "sakuracoin.info",
-  :record_ttl => "60",
   :min_version => 70002,
   :subversions => [
     "'/Satoshi:0.8.6.1/'",
@@ -16,4 +11,17 @@ CONFIG = {
   :accep_check_rate => 4 * 60 * 60,
   :sleep_between_connect => 500 * 1000,
   :min_last_seen => 24 * 60 * 60,
+  :seed_nodes => [
+    # ['127.0.0.1', 9301],
+    ["58.191.173.168", 9301],
+    ["61.44.127.57", 9301],
+    ["219.94.248.221", 9301],
+    ["153.120.3.72", 9301],
+    ["182.163.78.67", 9301],
+    ["125.55.155.2", 9301],
+    ["36.2.132.153", 9301],
+    ["59.84.150.98", 9301],
+    ["118.240.80.7", 9301],
+    ["116.82.210.220", 9301],
+  ]
 }

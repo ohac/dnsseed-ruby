@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'bitcoin-node'
+require 'config'
 
 def scan(host, port, timeout = 30, min_last_seen = 24)
   origNode = BitcoinNode.new(host, port, timeout)
@@ -34,8 +35,15 @@ def getfreshnodes(localdb, min_last_seen = 1)
   end
 end
 
-def mainloop(host, port, waitsec)
+def mainloop
+  waitsec = CONFIG[:connect_timeout]
   localdb = {}
+  CONFIG[:seed_nodes].each do |host, port|
+    key = [host, port]
+    localdb[key] = { :timestamp => Time.now.to_i }
+  end
+  host, port = localdb.keys[0]
+p [:init, host, port]
   loop do
     begin
       node = walk(host, port, localdb)
@@ -66,4 +74,4 @@ puts
   end
 end
 
-mainloop('127.0.0.1', 9301, 3)
+mainloop
