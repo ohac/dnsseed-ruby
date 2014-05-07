@@ -51,7 +51,8 @@ def ip2long(ip)
   ip.split('.').map(&:to_i).pack('C*').unpack('N')[0]
 end
 
-def add_node_to_dns(ip, port, version, subversion = '')
+def add_node_to_dns(ip, port, version, subversion)
+p subversion
   connect_to_db
   if ip2long(ip) != 0 && port != 0 && version > 0
     now = Time.now.to_i
@@ -206,7 +207,7 @@ EOF
 =end
   sql = <<EOF
 SELECT COUNT(*) FROM nodes WHERE accepts_incoming = 1 AND 
-  port = 9301 AND version >= ?;
+  port = 9301 AND version >= ? AND subversion LIKE '/Satoshi:0.8.6._/';
 EOF
   @db.get_first_value(sql, [CONFIG[:min_version]])
 end
