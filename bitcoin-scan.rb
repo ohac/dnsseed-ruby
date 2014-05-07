@@ -41,40 +41,55 @@ def dice(a)
   a[rand(a.size)]
 end
 
-def mainloop
-  waitsec = CONFIG[:connect_timeout]
-  localdb = {}
-  CONFIG[:seed_nodes].each do |host, port|
-    key = [host, port]
-    localdb[key] = { :timestamp => Time.now.to_i }
-  end
-  host, port = dice(localdb.keys)
-p [:init, host, port]
-  loop do
-    begin
-      node = walk(host, port, localdb)
-      if node
-        key = [host, port]
-        localdb[key] = {
-          :timestamp => Time.now.to_i,
-          :version => node.getVersion,
-          :subversion => node.getSubversion,
-        }
-      end
-    rescue => x
-p x
-    end
-    freshnodes = getfreshnodes(localdb)
-    freshnodes.each do |k, v|
-      host, port = k
-      nt = v[:timestamp]
-      version = v[:version]
-      subversion = v[:subversion]
+def shownodes(localdb)
+  localdb.each do |k, v|
+    host, port = k
+    nt = v[:timestamp]
+    version = v[:version]
+    subversion = v[:subversion]
 p [host, port, nt, version, subversion]
-    end
-    host, port = dice(freshnodes.keys)
-p [:next, host, port]
+  end
 puts
+end
+
+def subloop(localdb)
+  freshnodes = getfreshnodes(localdb)
+  shownodes(freshnodes)
+  host, port = dice(freshnodes.keys)
+  begin
+    node = walk(host, port, localdb)
+    if node
+      key = [host, port]
+      localdb[key] = {
+        :timestamp => Time.now.to_i,
+        :version => node.getVersion,
+        :subversion => node.getSubversion,
+      }
+    end
+  rescue => x
+p x
+  end
+end
+
+def mainloop
+  coinkeys = CONFIG.keys
+  coindb = {}
+  coinkeys.each do |coinkey|
+    coin = CONFIG[coinkey]
+    coindb[coinkey] = {}
+    localdb = coindb[coinkey]
+    coin[:seed_nodes].each do |host, port|
+      key = [host, port]
+      localdb[key] = { :timestamp => Time.now.to_i }
+    end
+  end
+  waitsec = 1
+  loop do
+    coinkeys.each do |coinkey|
+      coin = CONFIG[coinkey]
+      localdb = coindb[coinkey]
+      subloop(localdb)
+    end
     sleep waitsec
   end
 end
