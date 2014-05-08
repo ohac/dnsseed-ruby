@@ -65,7 +65,7 @@ puts
 end
 
 def subloop(localdb)
-  freshnodes = getfreshnodes(localdb)
+  freshnodes = getfreshnodes(localdb, rand(24))
   shownodes(freshnodes)
   host, port = dice(freshnodes.keys)
   begin
