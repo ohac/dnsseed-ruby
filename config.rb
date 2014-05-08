@@ -1,5 +1,6 @@
 CONFIG = {
   :sakuracoin => {
+    :port => 9301,
     :min_version => 70002,
     :subversions => [
       'Satoshi:0.8.6.1',
@@ -59,6 +60,7 @@ CONFIG = {
     ]
   },
   :sha1coin => {
+    :port => 9513,
     :min_version => 70002,
     :subversions => [
       'Satoshi:0.8.6.1',
