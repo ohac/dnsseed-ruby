@@ -2,6 +2,17 @@
 $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'bitcoin-node'
 require 'config'
+require 'redis'
+
+class Redis
+  def setm(k, o)
+    set(k, Marshal.dump(o))
+  end
+  def getm(k)
+    m = get(k)
+    m ? Marshal.load(m) : nil
+  end
+end
 
 def scan(host, port, timeout = 30, min_last_seen = 24)
   origNode = BitcoinNode.new(host, port, timeout)
@@ -72,23 +83,24 @@ p x
 end
 
 def mainloop
+  coinsdb = Redis.new
   coinkeys = CONFIG.keys
-  coindb = {}
   coinkeys.each do |coinkey|
     coin = CONFIG[coinkey]
-    coindb[coinkey] = {}
-    localdb = coindb[coinkey]
+    coindb = coinsdb.getm("dnsseed:#{coinkey}") || {}
     coin[:seed_nodes].each do |host, port|
       key = [host, port]
-      localdb[key] = { :timestamp => Time.now.to_i }
+      coindb[key] = { :timestamp => Time.now.to_i } unless coindb[key]
     end
+    coinsdb.setm("dnsseed:#{coinkey}", coindb)
   end
   waitsec = 1
   loop do
     coinkeys.each do |coinkey|
       coin = CONFIG[coinkey]
-      localdb = coindb[coinkey]
-      subloop(localdb)
+      coindb = coinsdb.getm("dnsseed:#{coinkey}")
+      subloop(coindb)
+      coinsdb.setm("dnsseed:#{coinkey}", coindb)
     end
     sleep waitsec
   end
