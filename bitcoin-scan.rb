@@ -41,7 +41,8 @@ def walk(host, port, localdb)
 end
 
 def getfreshnodes(localdb, min_last_seen = 1)
-  t = Time.now.to_i - min_last_seen * 60 * 60
+  max = localdb.map{|k, v| v[:timestamp]}.max
+  t = max - min_last_seen * 60 * 60
   localdb.select do |k, v|
     nt = v[:timestamp]
     nt > t
