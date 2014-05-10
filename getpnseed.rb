@@ -34,6 +34,7 @@ coinkeys.each do |coinkey|
   puts coinkey
   getfreshnodes(coindb, 2).each do |key, coin|
     host, port = key
+    next if host == '127.0.0.1'
     next if port != dport
     next unless coin[:version]
     next if coin[:version] < 70002
