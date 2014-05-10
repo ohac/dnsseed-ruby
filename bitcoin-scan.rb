@@ -22,7 +22,7 @@ def scan(host, port, min_last_seen = 24)
   t = Time.now.to_i - min_last_seen * 60 * 60
   nodes.each do |node|
     if node[:services][0] == 3 && node[:services][1] == 0
-      if node[:timestamp] > t
+      if node[:timestamp] > t && node[:port] == port
         yield node
       end
     end
@@ -66,12 +66,12 @@ puts
 end
 
 def subloop(localdb)
-  freshnodes = getfreshnodes(localdb, rand(24))
+  freshnodes = getfreshnodes(localdb, rand(24) + 1)
   shownodes(freshnodes)
   host, port = dice(freshnodes.keys)
   begin
-    timeout(30) do
-      node = walk(host, port, localdb)
+    node = timeout(30) do
+      walk(host, port, localdb)
     end
     return unless node
     key = [host, port]
