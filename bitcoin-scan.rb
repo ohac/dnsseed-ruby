@@ -3,6 +3,7 @@ $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'bitcoin-node'
 require 'config'
 require 'redis'
+require 'timeout'
 
 class Redis
   def setm(k, o)
@@ -14,8 +15,8 @@ class Redis
   end
 end
 
-def scan(host, port, timeout = 30, min_last_seen = 24)
-  origNode = BitcoinNode.new(host, port, timeout)
+def scan(host, port, min_last_seen = 24)
+  origNode = BitcoinNode.new(host, port)
   nodes = origNode.getAddr
   return if nodes.empty?
   t = Time.now.to_i - min_last_seen * 60 * 60
@@ -69,15 +70,16 @@ def subloop(localdb)
   shownodes(freshnodes)
   host, port = dice(freshnodes.keys)
   begin
-    node = walk(host, port, localdb)
-    if node
-      key = [host, port]
-      localdb[key] = {
-        :timestamp => Time.now.to_i,
-        :version => node.getVersion,
-        :subversion => node.getSubversion,
-      }
+    timeout(30) do
+      node = walk(host, port, localdb)
     end
+    return unless node
+    key = [host, port]
+    localdb[key] = {
+      :timestamp => Time.now.to_i,
+      :version => node.getVersion,
+      :subversion => node.getSubversion,
+    }
   rescue => x
 p x
   end

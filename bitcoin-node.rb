@@ -1,15 +1,12 @@
 require 'socket'
-require 'timeout'
 require 'digest/sha2'
 
 class BitcoinNode
 
-  def initialize(host, port, timeout = 5)
+  def initialize(host, port)
     @version = 0
     @queue = []
-    timeout(timeout) do
-      @sock = TCPSocket.open(host, port)
-    end
+    @sock = TCPSocket.open(host, port)
     @myself = [rand(0x80000000), rand(0x80000000)].pack('NN')
     pkt = _makeVersionPacket(70002)
     @sock.write(pkt)
