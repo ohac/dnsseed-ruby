@@ -10,6 +10,30 @@ class Redis
   end
 end
 
+if AMAZON[:access_key]
+  require 'route53'
+
+  def amazonupdate(coinkey, hosts)
+    access_key = AMAZON[:access_key]
+    secret_key = AMAZON[:secret_key]
+    name = AMAZON[:name]
+    target = AMAZON[:coins][coinkey]
+    return unless target
+    route53 = Route53::Connection.new(access_key, secret_key)
+    zones = route53.get_zones
+    zone = zones.find do |zone|
+      zone.name == name
+    end
+    records = zone.get_records
+    record = records.find do |record|
+      record.name == "#{target}.#{name}" && record.type == 'A'
+    end
+    return unless record
+p [:update, hosts]
+    #record.update(nil, nil, nil, hosts)
+  end
+end
+
 def getfreshnodes(localdb, min_last_seen = 1)
   max = localdb.map{|k, v| v[:timestamp]}.max
   t = max - min_last_seen * 60 * 60
@@ -32,7 +56,7 @@ coinkeys.each do |coinkey|
   next unless coindb
   puts
   puts coinkey
-  getfreshnodes(coindb, 2).each do |key, coin|
+  hosts = getfreshnodes(coindb, 24).select do |key, coin|
     host, port = key
     next if host == '127.0.0.1'
     next if port != dport
@@ -41,5 +65,9 @@ coinkeys.each do |coinkey|
     subv = ('1' + coin[:subversion].split(':')[1].chop.split('.').join).to_i
     next if subv < 10861
     puts ipv4tohex(host)
+    true
+  end
+  if AMAZON[:access_key]
+    amazonupdate(coinkey, hosts.keys.map{|host,port| host})
   end
 end
