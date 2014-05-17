@@ -29,8 +29,7 @@ if AMAZON[:access_key]
       record.name == "#{target}.#{name}" && record.type == 'A'
     end
     return unless record
-p [:update, hosts]
-    #record.update(nil, nil, nil, hosts)
+    record.update(nil, nil, nil, hosts)
   end
 end
 
@@ -61,10 +60,11 @@ coinkeys.each do |coinkey|
     next if host == '127.0.0.1'
     next if port != dport
     next unless coin[:version]
-    next if coin[:version] < 70002
-    subv = ('1' + coin[:subversion].split(':')[1].chop.split('.').join).to_i
-    next if subv < 10861
-    puts ipv4tohex(host)
+    next if coin[:version] < 70001
+    subv = '1' + coin[:subversion].split(':')[1].chop.split('.').join
+    subv = (subv + '000')[0, 5].to_i
+    next if subv < 10860
+    puts true ? ipv4tohex(host) : host
     true
   end
   if AMAZON[:access_key]

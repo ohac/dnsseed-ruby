@@ -3,13 +3,13 @@ require 'digest/sha2'
 
 class BitcoinNode
 
-  def initialize(host, port, magic = "\xfb\xc0\xb6\xdb")
+  def initialize(host, port, magic)
     @version = 0
     @queue = []
     @sock = TCPSocket.open(host, port)
     @magic = magic
     @myself = [rand(0x80000000), rand(0x80000000)].pack('NN')
-    pkt = _makeVersionPacket(70002)
+    pkt = _makeVersionPacket(70002) # TODO
     @sock.write(pkt)
     while !@sock.eof? && @version == 0
       pkt = readPacket
