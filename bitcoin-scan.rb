@@ -51,7 +51,7 @@ def getfreshnodes(localdb, min_last_seen = 1)
 end
 
 def dice(a)
-  a[rand(a.size)]
+  a[rand(a.size + 1)]
 end
 
 def shownodes(localdb)
