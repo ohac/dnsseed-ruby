@@ -1,6 +1,7 @@
 CONFIG = {
   :sakuracoin => {
     :port => 9301,
+    :magic => "\xfb\xc0\xb6\xdb",
     :min_version => 70002,
     :subversions => [
       'Satoshi:0.8.6.1',
@@ -61,6 +62,7 @@ CONFIG = {
   },
   :sha1coin => {
     :port => 9513,
+    :magic => "\xfb\xc0\xb6\xdb",
     :min_version => 70002,
     :subversions => [
       'Satoshi:0.8.6.1',
@@ -91,6 +93,7 @@ CONFIG = {
   },
   :yaycoin => {
     :port => 8484,
+    :magic => "\xfb\xc0\xb6\xdb",
     :min_version => 70002,
     :subversions => [
       'Satoshi:0.8.6.1',
@@ -118,6 +121,30 @@ CONFIG = {
       ["153.120.3.72", 8484],
     ]
   },
+  :sayacoin => {
+    :port => 8666,
+    :magic => "\x53\x41\x59\x41",
+    :min_version => 70002,
+    :subversions => [
+      'Satoshi:0.8.6.1',
+      'Satoshi:0.8.6.2',
+    ],
+    :seed_nodes => [
+      ['127.0.0.1', 8666],
+    ]
+  },
+  :monacoin => {
+    :port => 9401,
+    :magic => "\xfb\xc0\xb6\xdb",
+    :min_version => 70002,
+    :subversions => [
+      'Satoshi:0.8.6.1',
+      'Satoshi:0.8.6.2',
+    ],
+    :seed_nodes => [
+      ['127.0.0.1', 9401],
+    ]
+  },
 }
 AMAZON = {
   :access_key => 'xxxxxxxxxxxxxxxxxxxx',
@@ -126,5 +153,8 @@ AMAZON = {
   :coins => {
     :sakuracoin => 'skrseed',
     :sha1coin => 'shaseed',
+    :yaycoin => 'yayseed',
+    :monacoin => 'monaseed',
+    :sayacoin => 'sayaseed',
   },
 }

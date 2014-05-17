@@ -15,13 +15,13 @@ class Redis
   end
 end
 
-def scan(host, port, min_last_seen = 24)
-  origNode = BitcoinNode.new(host, port)
+def scan(host, port, magic, min_last_seen = 24)
+  origNode = BitcoinNode.new(host, port, magic)
   nodes = origNode.getAddr
   return if nodes.empty?
   t = Time.now.to_i - min_last_seen * 60 * 60
   nodes.each do |node|
-    if node[:services][0] == 3 && node[:services][1] == 0
+    if [1, 3].include?(node[:services][0]) && node[:services][1] == 0
       if node[:timestamp] > t && node[:port] == port
         yield node
       end
@@ -30,8 +30,8 @@ def scan(host, port, min_last_seen = 24)
   origNode
 end
 
-def walk(host, port, localdb)
-  scan(host, port) do |node|
+def walk(host, port, magic, localdb)
+  scan(host, port, magic) do |node|
     key = [node[:ipv4], node[:port]]
     entry = localdb[key] || {}
     ts = entry[:timestamp]
@@ -65,13 +65,13 @@ p [host, port, nt, version, subversion]
 puts
 end
 
-def subloop(localdb)
+def subloop(magic, localdb)
   freshnodes = getfreshnodes(localdb, rand(24) + 1)
   shownodes(freshnodes)
   host, port = dice(freshnodes.keys)
   begin
     node = timeout(30) do
-      walk(host, port, localdb)
+      walk(host, port, magic, localdb)
     end
     return unless node
     key = [host, port]
@@ -101,8 +101,9 @@ def mainloop
   loop do
     coinkeys.each do |coinkey|
       coin = CONFIG[coinkey]
+      magic = coin[:magic]
       coindb = coinsdb.getm("dnsseed:#{coinkey}")
-      subloop(coindb)
+      subloop(magic, coindb)
       coinsdb.setm("dnsseed:#{coinkey}", coindb)
     end
     sleep waitsec
