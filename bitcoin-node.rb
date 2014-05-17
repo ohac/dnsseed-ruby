@@ -3,10 +3,11 @@ require 'digest/sha2'
 
 class BitcoinNode
 
-  def initialize(host, port)
+  def initialize(host, port, magic = "\xfb\xc0\xb6\xdb")
     @version = 0
     @queue = []
     @sock = TCPSocket.open(host, port)
+    @magic = magic
     @myself = [rand(0x80000000), rand(0x80000000)].pack('NN')
     pkt = _makeVersionPacket(70002)
     @sock.write(pkt)
@@ -103,7 +104,7 @@ class BitcoinNode
     data = @sock.read(20)
     raise 'Failed to read from peer' if !data
     raise 'unexpected fragmentation' if data.size != 20
-    raise 'Corrupted stream' if data[0, 4] != "\xfb\xc0\xb6\xdb"
+    raise 'Corrupted stream' if data[0, 4] != @magic
     type = data[4, 12]
     type_pos = type.index("\0")
     type = type[0, type_pos] if type_pos
@@ -166,7 +167,7 @@ p :foo
   end
 
   def _makePacket(type, data)
-    packet = "\xfb\xc0\xb6\xdb" # magic header
+    packet = @magic
     packet += type + "\0" * (12 - type.size)
     packet += [data.size].pack('V')
     if data && (@version > 0x209 || @version == 0)
