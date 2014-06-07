@@ -60,7 +60,7 @@ coinkeys.each do |coinkey|
     next if host == '127.0.0.1'
     next if port != dport
     next unless coin[:version]
-    next if coin[:version] < 70001
+    next if coin[:version] < 60013 # TODO
     subv = '1' + coin[:subversion].split(':')[1].chop.split('.').join
     subv = (subv + '000')[0, 5].to_i
     next if subv < 10860
