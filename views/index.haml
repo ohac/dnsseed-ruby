@@ -1,0 +1,14 @@
+!!!
+%html
+  %head
+    %title Seed
+  %body
+    - coins.each do |coinid,coin|
+      %h1= coinid
+      %p DNS Seed: #{AMAZON[:coins][coinid]}.#{AMAZON[:name].chop}
+      %textarea{:cols=>24, :rows=>8}
+        - text = coin.map{|host, v| "addnode=#{host[0]}"}
+        = preserve(text.join("\n"))
+      %textarea{:cols=>24, :rows=>8}
+        - text = coin.map{|host, v| ipv4tohex(host[0])}
+        = preserve(text.join(",\n"))
