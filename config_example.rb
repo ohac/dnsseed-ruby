@@ -168,5 +168,6 @@ AMAZON = {
     :yaycoin => 'yayseed',
     :monacoin => 'monaseed',
     :sayacoin => 'sayaseed',
+    :ringo => 'rinseed',
   },
 }
