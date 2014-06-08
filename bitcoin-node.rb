@@ -3,20 +3,20 @@ require 'digest/sha2'
 
 class BitcoinNode
 
-  def initialize(host, port, magic)
+  def initialize(host, port, magic, ts)
     @version = 0
     @queue = []
     @sock = TCPSocket.open(host, port)
     @magic = magic
     @myself = [rand(0x80000000), rand(0x80000000)].pack('NN')
-    pkt = _makeVersionPacket(70002) # TODO
+    pkt = _makeVersionPacket(70002, ts) # TODO
     @sock.write(pkt)
     while !@sock.eof? && @version == 0
       pkt = readPacket
       case pkt['type']
       when 'version'
         raise 'Got version packet twice!' if @version != 0
-        _decodeVersionPayload(pkt['payload'])
+        _decodeVersionPayload(pkt['payload'], ts)
       else
         raise pkt['type']
       end
@@ -88,11 +88,11 @@ class BitcoinNode
     h[:major] + '.' + h[:minor] + '.' + h[:revision] + '[.' + proto + ']'
   end
 
-  def _decodeVersionPayload(data)
-    ar = data.unpack('V5a26a26V2C')
+  def _decodeVersionPayload(data, ts = true)
+    ar = data.unpack(ts ? 'V5a30a30V2C' : 'V5a26a26V2C')
     @version = ar[0]
     @version = 300 if @version == 10300
-    @subversion = data[81, ar[-1]]
+    @subversion = data[ts ? 89 : 81, ar[-1]]
     ar2 = data[(81 + ar[-1])..-1].unpack('V')
     @start_height = ar2[0]
     # send verack?
@@ -132,24 +132,25 @@ p :foo
     }
   end
 
-  def _makeVersionPacket(version, nServices = 0, timestamp = nil, str = ".0",
-      nBestHeight = 0)
+  def _makeVersionPacket(version, ts, nServices = 0, timestamp = nil,
+      str = ".0", nBestHeight = 0)
     timestamp ||= Time.now.to_i
     data = [version].pack('V')
     data += [(nServices >> 32) & 0xffffffff, nServices & 0xffffffff].pack('VV')
     data += [(timestamp >> 32) & 0xffffffff, timestamp & 0xffffffff].pack('VV')
-    data += _address(@sock.addr, nServices)
-    data += _address(@sock.peeraddr, nServices)
+    data += _address(@sock.addr, nServices, ts)
+    data += _address(@sock.peeraddr, nServices, ts)
     data += @myself
     data += _string(str)
     data += [nBestHeight].pack('V')
     _makePacket('version', data)
   end
 
-  def _address(addr, nServices)
+  def _address(addr, nServices, ts)
     port = addr[1]
     ip = addr[3]
-    data = [(nServices >> 32) & 0xffffffff, nServices & 0xffffffff].pack('VV')
+    data = ts ? [Time.now.to_i].pack('V') : ''
+    data += [(nServices >> 32) & 0xffffffff, nServices & 0xffffffff].pack('VV')
     data += "\0" * 12 # reserved, probably for ipv6
     data += ip.split('.').map(&:to_i).pack('CCCC')
     data + [port].pack('n')

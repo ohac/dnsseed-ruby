@@ -157,6 +157,19 @@ CONFIG = {
       ['127.0.0.1', 9393],
     ]
   },
+  :kumacoin => {
+    :port => 7586,
+    :magic => "\xc3\xd4\xd2\xfe",
+    :ts => true,
+    :min_version => 60007,
+    :subversions => [
+      'Satoshi:0.8.6.1',
+      'Satoshi:0.8.6.2',
+    ],
+    :seed_nodes => [
+      ['127.0.0.1', 7586],
+    ]
+  },
 }
 AMAZON = {
   :access_key => 'xxxxxxxxxxxxxxxxxxxx',
