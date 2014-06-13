@@ -5,6 +5,9 @@
   %body
     - coins.each do |coinid,coin|
       %h1= coinid
+      - bt = CONFIG[coinid][:bootstrap]
+      - if bt
+        %a{:href => bt} Download bootstrap.dat (BitTorrent)
       %p DNS Seed: #{AMAZON[:coins][coinid]}.#{AMAZON[:name].chop}
       %textarea{:cols=>24, :rows=>8}
         - text = coin.map{|host, v| "addnode=#{host[0]}"}

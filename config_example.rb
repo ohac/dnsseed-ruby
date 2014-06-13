@@ -1,5 +1,6 @@
 CONFIG = {
   :sakuracoin => {
+    # :bootstrap => 'http://example.com/bootstrap.dat.torrent',
     :port => 9301,
     :magic => "\xfb\xc0\xb6\xdb",
     :min_version => 70002,
