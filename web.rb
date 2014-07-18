@@ -32,8 +32,8 @@ def getallfreshnodes
   coinkeys = CONFIG.keys
   coins = {}
   coinkeys.each do |coinkey|
-    coin = CONFIG[coinkey]
-    dport = coin[:port]
+    coinconf = CONFIG[coinkey]
+    dport = coinconf[:port]
     coindb = coinsdb.getm("dnsseed:#{coinkey}")
     next unless coindb
     hosts = {}
@@ -45,7 +45,8 @@ def getallfreshnodes
       next if coin[:version] < 60007 # TODO
       subv = '1' + coin[:subversion].split(':')[1].chop.split('.').join
       subv = (subv + '000')[0, 5].to_i
-      next if subv < 10860
+      subvconf = 10000 + (coinconf[:subversion] || 860)
+      next if subv < subvconf
       hosts[key] = coin
     end
     coins[coinkey] = hosts
