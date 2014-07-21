@@ -69,6 +69,6 @@ coinkeys.each do |coinkey|
     true
   end
   if AMAZON[:access_key]
-    amazonupdate(coinkey, hosts.keys.map{|host,port| host})
+    amazonupdate(coinkey, hosts.keys.map{|host,port| host}.shuffle[0, 100])
   end
 end
