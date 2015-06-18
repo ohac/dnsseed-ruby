@@ -2,6 +2,7 @@
 $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'config'
 require 'redis'
+require 'aws-sdk'
 
 class Redis
   def getm(k)
@@ -10,27 +11,32 @@ class Redis
   end
 end
 
-if AMAZON[:access_key]
-  require 'route53'
 
-  def amazonupdate(coinkey, hosts)
-    access_key = AMAZON[:access_key]
-    secret_key = AMAZON[:secret_key]
-    name = AMAZON[:name]
-    target = AMAZON[:coins][coinkey]
-    return unless target
-    route53 = Route53::Connection.new(access_key, secret_key)
-    zones = route53.get_zones
-    zone = zones.find do |zone|
-      zone.name == name
-    end
-    records = zone.get_records
-    record = records.find do |record|
-      record.name == "#{target}.#{name}" && record.type == 'A'
-    end
-    return unless record
-    record.update(nil, nil, nil, hosts)
-  end
+def update_record(domain, host, records, region = 'us-east-1')
+  r53 = Aws::Route53::Client.new(region: region)
+  zone = r53.list_hosted_zones.hosted_zones.find{|z|z.name == domain}
+  r53.change_resource_record_sets(
+    hosted_zone_id: zone.id,
+    change_batch: {
+      changes: [
+        {
+          action: 'UPSERT',
+          resource_record_set: {
+            name: "#{host}.#{domain}",
+            type: 'A',
+            ttl: 300,
+            resource_records: records.map{|r| {value: r}}
+          }
+        }
+      ]
+    }
+  )
+end
+
+def amazonupdate(coinkey, hosts)
+  target = AMAZON[:coins][coinkey]
+  return unless target
+  update_record(AMAZON[:name], target, hosts)
 end
 
 def getfreshnodes(localdb, min_last_seen = 1)
@@ -68,7 +74,5 @@ coinkeys.each do |coinkey|
     puts true ? ipv4tohex(host) : host
     true
   end
-  if AMAZON[:access_key]
-    amazonupdate(coinkey, hosts.keys.map{|host,port| host}.shuffle[0, 100])
-  end
+  amazonupdate(coinkey, hosts.keys.map{|host,port| host}.shuffle[0, 100])
 end

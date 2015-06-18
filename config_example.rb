@@ -173,8 +173,6 @@ CONFIG = {
   },
 }
 AMAZON = {
-  :access_key => 'xxxxxxxxxxxxxxxxxxxx',
-  :secret_key => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
   :name => 'sighash.info.',
   :coins => {
     :sakuracoin => 'skrseed',
