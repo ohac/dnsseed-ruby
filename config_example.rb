@@ -2,7 +2,7 @@ CONFIG = {
   :sakuracoin => {
     # :bootstrap => 'http://example.com/bootstrap.dat.torrent',
     :port => 9301,
-    :magic => "\xfb\xc0\xb6\xdb",
+    :magic => ["fbc0b6db"].pack('H*'),
     :min_version => 70002,
     :subversions => [
       'Satoshi:0.8.6.1',
@@ -63,7 +63,7 @@ CONFIG = {
   },
   :sha1coin => {
     :port => 9513,
-    :magic => "\xfb\xc0\xb6\xdb",
+    :magic => ["fbc0b6db"].pack('H*'),
     :min_version => 70002,
     :subversions => [
       'Satoshi:0.8.6.1',
@@ -94,7 +94,7 @@ CONFIG = {
   },
   :yaycoin => {
     :port => 8484,
-    :magic => "\xfb\xc0\xb6\xdb",
+    :magic => ["fbc0b6db"].pack('H*'),
     :min_version => 70002,
     :subversions => [
       'Satoshi:0.8.6.1',
@@ -124,7 +124,7 @@ CONFIG = {
   },
   :sayacoin => {
     :port => 8666,
-    :magic => "\x53\x41\x59\x41",
+    :magic => ["53415941"].pack('H*'),
     :min_version => 70002,
     :subversions => [
       'Satoshi:0.8.6.1',
@@ -136,7 +136,7 @@ CONFIG = {
   },
   :monacoin => {
     :port => 9401,
-    :magic => "\xfb\xc0\xb6\xdb",
+    :magic => ["fbc0b6db"].pack('H*'),
     :min_version => 70002,
     :subversions => [
       'Satoshi:0.8.6.1',
@@ -148,7 +148,7 @@ CONFIG = {
   },
   :ringo => {
     :port => 9393,
-    :magic => "\x70\x35\x22\x05",
+    :magic => ["70352205"].pack('H*'),
     :min_version => 70002,
     :subversions => [
       'Satoshi:0.8.6.1',
@@ -160,7 +160,7 @@ CONFIG = {
   },
   :kumacoin => {
     :port => 7586,
-    :magic => "\xc3\xd4\xd2\xfe",
+    :magic => ["c3d4d2fe"].pack('H*'),
     :ts => true,
     :min_version => 60007,
     :subversions => [
