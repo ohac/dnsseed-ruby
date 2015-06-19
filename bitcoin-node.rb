@@ -9,7 +9,7 @@ class BitcoinNode
     @sock = TCPSocket.open(host, port)
     @magic = magic
     @myself = [rand(0x80000000), rand(0x80000000)].pack('NN')
-    pkt = _makeVersionPacket(70002, ts) # TODO
+    pkt = _makeVersionPacket(70006, ts) # TODO
     @sock.write(pkt)
     while !@sock.eof? && @version == 0
       pkt = readPacket
