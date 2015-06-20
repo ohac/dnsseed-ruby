@@ -111,7 +111,7 @@ CONFIG = {
   :ringo => {
     :port => 9393,
     :magic => ["70352205"].pack('H*'),
-    :min_version => 70001,
+    :min_version => 60013,
     :subversions => [
       'Satoshi:0.8.6.1',
       'Satoshi:0.8.6.2',
