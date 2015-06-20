@@ -60,7 +60,7 @@ CONFIG = {
   :sayacoin => {
     :port => 8666,
     :magic => ["53415941"].pack('H*'),
-    :min_version => 70002,
+    :min_version => 70001,
     :subversions => [
       'Satoshi:0.8.6.1',
       'Satoshi:0.8.6.2',
@@ -111,7 +111,7 @@ CONFIG = {
   :ringo => {
     :port => 9393,
     :magic => ["70352205"].pack('H*'),
-    :min_version => 70002,
+    :min_version => 70001,
     :subversions => [
       'Satoshi:0.8.6.1',
       'Satoshi:0.8.6.2',
@@ -179,7 +179,7 @@ CONFIG = {
   :bitzeny => {
     :port => 9253,
     :magic => ["daa5bef9"].pack('H*'),
-    :min_version => 1010000,
+    :min_version => 70006,
     :subversions => [
       'Satoshi:1.1.0',
     ],
