@@ -222,6 +222,22 @@ CONFIG = {
       ['180.18.76.113', 2345],
     ]
   },
+  :fujicoin => {
+    :port => 3777,
+    :magic => ["66756a69"].pack('H*'),
+    :min_version => 70002,
+    :subversions => [
+      'FujiCoin:0.8.6.2',
+    ],
+    :seed_nodes => [
+      ['54.186.207.129', 3777], # seed2.fujicoin.org 0x81CFBA36
+      ['54.69.108.71', 3777], # seed1.fujicoin.org
+      ['128.199.255.227', 3777],
+      ['188.165.82.229', 3777],
+      ['85.25.201.216', 3777],
+      ['191.233.32.153', 3777],
+    ]
+  },
 }
 AMAZON = {
   :name => 'sighash.info.',
@@ -235,5 +251,6 @@ AMAZON = {
     :kumacoin => 'kumaseed',
     :bitzeny => 'znyseed',
     :futcoin => 'futseed',
+    :fujicoin => 'fujiseed',
   },
 }
