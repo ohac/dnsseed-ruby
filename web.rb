@@ -14,6 +14,7 @@ end
 
 def getfreshnodes(localdb, min_last_seen = 1)
   max = localdb.map{|k, v| v[:timestamp]}.max
+  return [] unless max
   t = max - min_last_seen * 60 * 60
   localdb.select do |k, v|
     nt = v[:timestamp]
