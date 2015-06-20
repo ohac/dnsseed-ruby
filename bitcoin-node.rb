@@ -23,6 +23,8 @@ class BitcoinNode
     end
   end
 
+  attr_reader :start_height
+
   def getAddr
     @sock.write(_makePacket('getaddr', ''))
     pkt = nil

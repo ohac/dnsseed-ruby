@@ -60,9 +60,9 @@ def shownodes(localdb)
     nt = v[:timestamp]
     version = v[:version]
     subversion = v[:subversion]
-p [host, port, nt, version, subversion]
+#p [host, port, nt, version, subversion]
   end
-puts
+#puts
 end
 
 def subloop(magic, tsf, localdb)
@@ -79,6 +79,7 @@ def subloop(magic, tsf, localdb)
       :timestamp => Time.now.to_i,
       :version => node.getVersion,
       :subversion => node.getSubversion,
+      :height => node.start_height,
     }
   rescue => x
 p x

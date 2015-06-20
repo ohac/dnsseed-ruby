@@ -21,6 +21,12 @@ def getfreshnodes(localdb, min_last_seen = 1)
   end
 end
 
+def guessheight(localdb)
+  cs = getfreshnodes(localdb).map{|k, v| v[:height]}.compact
+  mid = cs[cs.size / 2]
+  cs.select{|c|c < mid + 50}.max
+end
+
 helpers do
   def ipv4tohex(ipv4)
     "0x%s" % [ipv4.split('.').map{|x|'%02x' % x.to_i}.reverse.join]
@@ -49,7 +55,7 @@ def getallfreshnodes
       next if subv < subvconf
       hosts[key] = coin
     end
-    coins[coinkey] = hosts
+    coins[coinkey] = {:hosts => hosts, :height => guessheight(coindb)}
   end
   coins
 end
