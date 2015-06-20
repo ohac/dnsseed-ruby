@@ -15,6 +15,7 @@
             %a{:id => "#{coinid}-tab", :role => :tab, 'data-toggle' => :tab, :href => "##{coinid}", 'aria-controls' => coinid, 'aria-expanded' => first}= coinid
           - first = false
       %div{:class => 'tab-content'}
+        - domain = AMAZON[:name].chop
         - first = true
         - coins.each do |coinid,coin|
           %div{:id => coinid, :role => :tabpanel, :class => "tab-pane fade#{first ? ' in active' : ''}", 'aria-labelledBy' => "#{coinid}-tab"}
@@ -22,7 +23,9 @@
             - bt = CONFIG[coinid][:bootstrap]
             - if bt
               %a{:href => bt} Download bootstrap.dat (BitTorrent)
-            %p DNS Seed: #{AMAZON[:coins][coinid]}.#{AMAZON[:name].chop}
+            - dnsseed = AMAZON[:coins][coinid]
+            - if dnsseed
+              %p DNS Seed: #{dnsseed}.#{domain}
             %p Height: #{coin[:height]}
             %textarea{:cols=>40, :rows=>8}
               - text = coin[:hosts].map{|host, v| "addnode=#{host[0]}"}
