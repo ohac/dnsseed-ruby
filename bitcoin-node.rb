@@ -94,8 +94,9 @@ class BitcoinNode
     ar = data.unpack(ts ? 'V5a30a30V2C' : 'V5a26a26V2C')
     @version = ar[0]
     @version = 300 if @version == 10300
-    @subversion = data[ts ? 89 : 81, ar[-1]]
-    ar2 = data[(81 + ar[-1])..-1].unpack('V')
+    offset = ts ? 89 : 81
+    @subversion = data[offset, ar[-1]]
+    ar2 = data[(offset + ar[-1])..-1].unpack('V')
     @start_height = ar2[0]
     # send verack?
     @sock.write(_makePacket('verack', '')) if @version >= 209
