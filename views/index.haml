@@ -3,18 +3,34 @@
   %head
     %title Seed
     %link{:rel => 'shortcut icon', :href => 'Shamrock.png'}
+    %link{:rel => "stylesheet", :href => "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"}
+    %link{:rel => "stylesheet", :href => "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"}
   %body
-    - coins.each do |coinid,coin|
-      %h1= coinid
-      - bt = CONFIG[coinid][:bootstrap]
-      - if bt
-        %a{:href => bt} Download bootstrap.dat (BitTorrent)
-      %p DNS Seed: #{AMAZON[:coins][coinid]}.#{AMAZON[:name].chop}
-      %p Height: #{coin[:height]}
-      - p coin[:height]
-      %textarea{:cols=>24, :rows=>8}
-        - text = coin[:hosts].map{|host, v| "addnode=#{host[0]}"}
-        = preserve(text.join("\n"))
-      %textarea{:cols=>24, :rows=>8}
-        - text = coin[:hosts].map{|host, v| ipv4tohex(host[0])}
-        = preserve(text.join(",\n"))
+    %div.container
+      %h1 Seed
+      %ul#coinTabs{:class => 'nav nav-tabs', :role => :tablist}
+        - first = true
+        - coins.each do |coinid,coin|
+          %li{:role => :presentation, :class => first ? :active : ''}
+            %a{:id => "#{coinid}-tab", :role => :tab, 'data-toggle' => :tab, :href => "##{coinid}", 'aria-controls' => coinid, 'aria-expanded' => first}= coinid
+          - first = false
+      %div{:class => 'tab-content'}
+        - first = true
+        - coins.each do |coinid,coin|
+          %div{:id => coinid, :role => :tabpanel, :class => "tab-pane fade#{first ? ' in active' : ''}", 'aria-labelledBy' => "#{coinid}-tab"}
+            %h2= coinid
+            - bt = CONFIG[coinid][:bootstrap]
+            - if bt
+              %a{:href => bt} Download bootstrap.dat (BitTorrent)
+            %p DNS Seed: #{AMAZON[:coins][coinid]}.#{AMAZON[:name].chop}
+            %p Height: #{coin[:height]}
+            %textarea{:cols=>40, :rows=>8}
+              - text = coin[:hosts].map{|host, v| "addnode=#{host[0]}"}
+              = preserve(text.join("\n"))
+            %textarea{:cols=>20, :rows=>8}
+              - text = coin[:hosts].map{|host, v| ipv4tohex(host[0])}
+              = preserve(text.join(",\n"))
+          - first = false
+    %script{:src => "//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"}
+    %script{:src => "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"}
+    %script{:src => "js/index.js"}
