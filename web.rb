@@ -49,11 +49,11 @@ def getallfreshnodes
       next if host == '127.0.0.1'
       next if port != dport
       next unless coin[:version]
-p [coinkey, coin[:version], coinconf[:min_version]]
       next if coin[:version] < coinconf[:min_version]
-      subv = '1' + coin[:subversion].split(':')[1].chop.split('.').join
-      subv = (subv + '000')[0, 5].to_i
-      subvconf = 10000 + (coinconf[:subversion] || 860)
+      subv = coin[:subversion].split(':')[1].chop.split('.')
+      subv = '1' + subv.map{|v| '%02d' % v.to_i}.join
+      subv = (subv + '000')[0, 9].to_i - 100000000
+      subvconf = (coinconf[:subversion] || 80600)
       next if subv < subvconf
       hosts[key] = coin
     end
