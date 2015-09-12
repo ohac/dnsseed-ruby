@@ -33,6 +33,12 @@
             %textarea{:cols=>20, :rows=>8}
               - text = coin[:hosts].map{|host, v| ipv4tohex(host[0])}
               = preserve(text.join(",\n"))
+            %br
+            %br
+            - subvs = coin[:hosts].group_by{|host, v| v[:subversion]}
+            - subvs.each do |k,v|
+              = k + ': ' + v.size.to_s
+              %br
           - first = false
     %script{:src => "//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"}
     %script{:src => "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"}
