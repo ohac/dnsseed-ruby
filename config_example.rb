@@ -4,10 +4,6 @@ CONFIG = {
     :port => 9301,
     :magic => ["fbc0b6db"].pack('H*'),
     :min_version => 70002,
-    :subversions => [
-      'Satoshi:0.8.6.1',
-      'Satoshi:0.8.6.2',
-    ],
     :unaccep_check_rate => 36 * 60 * 60,
     :min_up_time_to_check => 7 * 24 * 60 * 60,
     :purge_age => 48 * 60 * 60,
@@ -25,10 +21,6 @@ CONFIG = {
     :port => 9513,
     :magic => ["fbc0b6db"].pack('H*'),
     :min_version => 70002,
-    :subversions => [
-      'Satoshi:0.8.6.1',
-      'Satoshi:0.8.6.2',
-    ],
     :seed_nodes => [
       ['127.0.0.1', 9513],
       ['219.94.248.221', 9513],
@@ -43,10 +35,6 @@ CONFIG = {
     :port => 8484,
     :magic => ["fbc0b6db"].pack('H*'),
     :min_version => 70002,
-    :subversions => [
-      'Satoshi:0.8.6.1',
-      'Satoshi:0.8.6.2',
-    ],
     :seed_nodes => [
       ['127.0.0.1', 8484],
       ['222.15.33.156', 8484],
@@ -61,10 +49,6 @@ CONFIG = {
     :port => 8666,
     :magic => ["53415941"].pack('H*'),
     :min_version => 70001,
-    :subversions => [
-      'Satoshi:0.8.6.1',
-      'Satoshi:0.8.6.2',
-    ],
     :seed_nodes => [
       ['127.0.0.1', 8666],
       ['182.163.86.26', 8666],
@@ -79,10 +63,7 @@ CONFIG = {
     :port => 9401,
     :magic => ["fbc0b6db"].pack('H*'),
     :min_version => 70002,
-    :subversions => [
-      'Satoshi:0.8.6.1',
-      'Satoshi:0.8.6.2',
-    ],
+    :subversion => 100202,
     :seed_nodes => [
       ['127.0.0.1', 9401],
       ['219.94.248.221', 9401],
@@ -112,10 +93,6 @@ CONFIG = {
     :port => 9393,
     :magic => ["70352205"].pack('H*'),
     :min_version => 60013,
-    :subversions => [
-      'Satoshi:0.8.6.1',
-      'Satoshi:0.8.6.2',
-    ],
     :seed_nodes => [
       ['127.0.0.1', 9393],
       ['106.173.76.190', 9393],
@@ -146,10 +123,6 @@ CONFIG = {
     :magic => ["c3d4d2fe"].pack('H*'),
     :ts => true,
     :min_version => 60007,
-    :subversions => [
-      'Satoshi:0.8.6.1',
-      'Satoshi:0.8.6.2',
-    ],
     :seed_nodes => [
       ['127.0.0.1', 7586],
       ['118.1.221.114', 7586],
@@ -180,9 +153,6 @@ CONFIG = {
     :port => 9253,
     :magic => ["daa5bef9"].pack('H*'),
     :min_version => 70006,
-    :subversions => [
-      'Satoshi:1.1.0',
-    ],
     :seed_nodes => [
       ['153.120.5.171', 9253], # seed.bitzeny.org
       ["54.68.124.6", 9253],
@@ -197,9 +167,6 @@ CONFIG = {
     :magic => ["70352205"].pack('H*'),
     :ts => true,
     :min_version => 70113,
-    :subversions => [
-      'FutCoin:1.0.2.1',
-    ],
     :seed_nodes => [
       ['54.64.113.221', 2345], # 0xdd714036
       ['54.172.223.229', 2345], # 0xe5dfac36
@@ -226,9 +193,6 @@ CONFIG = {
     :port => 3777,
     :magic => ["66756a69"].pack('H*'),
     :min_version => 70002,
-    :subversions => [
-      'FujiCoin:0.8.6.2',
-    ],
     :seed_nodes => [
       ['54.186.207.129', 3777], # seed2.fujicoin.org 0x81CFBA36
       ['54.69.108.71', 3777], # seed1.fujicoin.org
@@ -242,9 +206,6 @@ CONFIG = {
     :port => 50884,
     :magic => ["fcd9b7dd"].pack('H*'),
     :min_version => 60001,
-    :subversions => [
-      'Satoshi:1.0.0.0',
-    ],
     :seed_nodes => [
 #     ['113.203.253.46', 50884], # 0x2EFDCB71
 #     ['214.58.27.204', 50884], # 0xCC1B3AD6
