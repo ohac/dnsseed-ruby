@@ -58,7 +58,7 @@ def getallfreshnodes
       subv = subversion.split(':')[1].chop.split('.')
       subv = '1' + subv.map{|v| '%02d' % v.to_i}.join
       subv = (subv + '000')[0, 9].to_i - 100000000
-      subvconf = (coinconf[:subversion] || 80600)
+      subvconf = coinconf[:subversion] || 80600
       next if subv < subvconf
       hosts[key] = coin
     end
