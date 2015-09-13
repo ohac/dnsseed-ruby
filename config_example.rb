@@ -87,6 +87,15 @@ CONFIG = {
       ['157.7.170.150', 9401],
       ['122.249.125.226', 9401],
       ['123.57.15.153', 9401],
+    ],
+    :special_nodes => {
+      '153.120.39.89' => { :name => 'dnsseed.monacoin.org (Monacoin Core)' },
+      '49.212.167.79' => { :name => 'www13305uf.sakura.ne.jp (Monacoin Core)' },
+      '195.154.223.134' => {:name => '195-154-223-134.rev.poneytelecom.eu (Monacoin Core)' },
+      '59.157.5.163' => { :name => 'v-59-157-5-163.ub-freebit.net (Monacoin Core)' },
+      '104.156.238.203' => { :name => '104.156.238.203.vultr.com (Monacoin Core)' },
+      '195.20.47.205' => { :name => 'seed.givememona.tk (MonacoinJ)' },
+      '191.233.32.153' => { :name => 'api.monaco-ex.org (MonacoinJ)' },
     ]
   },
   :ringo => {

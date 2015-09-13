@@ -44,20 +44,29 @@ def getallfreshnodes
     coindb = coinsdb.getm("dnsseed:#{coinkey}")
     next unless coindb
     hosts = {}
+    special_nodes = coinconf[:special_nodes].clone
     getfreshnodes(coindb, 24).each do |key, coin|
       host, port = key
       next if host == '127.0.0.1'
       next if port != dport
       next unless coin[:version]
       next if coin[:version] < coinconf[:min_version]
-      subv = coin[:subversion].split(':')[1].chop.split('.')
+      subversion = coin[:subversion]
+      if snode = special_nodes[host]
+        snode[:subversion] = subversion
+      end
+      subv = subversion.split(':')[1].chop.split('.')
       subv = '1' + subv.map{|v| '%02d' % v.to_i}.join
       subv = (subv + '000')[0, 9].to_i - 100000000
       subvconf = (coinconf[:subversion] || 80600)
       next if subv < subvconf
       hosts[key] = coin
     end
-    coins[coinkey] = {:hosts => hosts, :height => guessheight(coindb)}
+    coins[coinkey] = {
+      :hosts => hosts,
+      :height => guessheight(coindb),
+      :special_nodes => special_nodes,
+    }
   end
   coins
 end

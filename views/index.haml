@@ -39,6 +39,10 @@
             - subvs.each do |k,v|
               = k + ': ' + v.size.to_s
               %br
+            %br
+            - subvs = coin[:special_nodes].each do |k,v|
+              #{v[:name]} : #{v[:subversion] || 'Offline'}
+              %br
           - first = false
     %script{:src => "//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"}
     %script{:src => "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"}
