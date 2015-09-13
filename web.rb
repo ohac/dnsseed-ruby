@@ -44,7 +44,7 @@ def getallfreshnodes
     coindb = coinsdb.getm("dnsseed:#{coinkey}")
     next unless coindb
     hosts = {}
-    special_nodes = coinconf[:special_nodes].clone
+    special_nodes = (coinconf[:special_nodes] || {}).clone
     getfreshnodes(coindb, 24).each do |key, coin|
       host, port = key
       next if host == '127.0.0.1'
